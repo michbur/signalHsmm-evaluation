@@ -1,0 +1,29 @@
+---
+title: "Evaluation of signalHsmm"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(signalHsmm)
+library(ggplot2)
+```
+
+UniProt query: 
+```
+source: taxonomy:"Plasmodium [5820]" fragment:no annotation:(type:signal evidence:manual) created:[* TO 20200810]
+```
+
+```{r}
+seqs <- read_txt("./data/plasmodium-prots.fasta")
+preds <- pred2df(run_signalHsmm(seqs))
+
+DT::datatable(preds, options = list(pageLength = 10, dom = "tBip", 
+                                    autoWidth = TRUE),
+            filter = "bottom")
+
+ggplot(preds, aes(x = is.signal)) +
+  geom_bar() +
+  theme_bw()
+```
+
